@@ -9,9 +9,9 @@
         <version>3.0.0.M3-SNAPSHOT</version>
     </parent>
 
-    <properties>
-        <Automatic-Module-Name>io.jooby.helidon-nima</Automatic-Module-Name>
-    </properties>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>jooby-helidon-nima</artifactId>
+
     <build>
         <plugins>
             <plugin>
@@ -20,14 +20,14 @@
                 <configuration>
                     <source>19</source>
                     <target>19</target>
-                    <compilerArgs>--enable-preview</compilerArgs>
+                    <release>19</release>
+                    <compilerArgs>
+                        <arg>--enable-preview</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-
-    <modelVersion>4.0.0</modelVersion>
-    <artifactId>jooby-helidon-nima</artifactId>
 
     <dependencies>
         <dependency>
@@ -40,53 +40,41 @@
             <artifactId>helidon-nima-webserver</artifactId>
             <version>4.0.0-ALPHA3</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>io.jooby</groupId>-->
-<!--            <artifactId>jooby</artifactId>-->
-<!--            <version>${jooby.version}</version>-->
-<!--        </dependency>-->
-
-<!--        &lt;!&ndash; utow &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            &lt;!&ndash; remove xnio once we upgrade to 2.2.18 +  There is a Invalida Path on Windows&ndash;&gt;-->
-<!--            <groupId> org.jboss.xnio</groupId>-->
-<!--            <artifactId>xnio-api</artifactId>-->
-<!--            <version>3.8.8.Final</version>-->
-<!--        </dependency>-->
-
-<!--        <dependency>-->
-<!--            <groupId>io.undertow</groupId>-->
-<!--            <artifactId>undertow-core</artifactId>-->
-<!--        </dependency>-->
-
-<!--        <dependency>-->
-<!--            <groupId>org.conscrypt</groupId>-->
-<!--            <artifactId>conscrypt-openjdk-uber</artifactId>-->
-<!--            <scope>provided</scope>-->
-<!--        </dependency>-->
-
-        <!-- Test dependencies -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jacoco</groupId>
-            <artifactId>org.jacoco.agent</artifactId>
-            <classifier>runtime</classifier>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>io.jooby</groupId>
             <artifactId>jooby</artifactId>
+            <version>${jooby.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>2.0.6</version>
+        </dependency>
+
+        <!-- Test dependencies -->
+<!--        <dependency>-->
+<!--            <groupId>org.junit.jupiter</groupId>-->
+<!--            <artifactId>junit-jupiter-engine</artifactId>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>org.jacoco</groupId>-->
+<!--            <artifactId>org.jacoco.agent</artifactId>-->
+<!--            <classifier>runtime</classifier>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>org.mockito</groupId>-->
+<!--            <artifactId>mockito-core</artifactId>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>org.jetbrains.kotlinx</groupId>
+            <artifactId>kotlinx-coroutines-core-jvm</artifactId>
+            <version>1.6.4</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

@@ -332,6 +332,12 @@
 
       <dependency>
         <groupId>io.jooby</groupId>
+        <artifactId>jooby-helidon-nima</artifactId>
+        <version>${jooby.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.jooby</groupId>
         <artifactId>jooby-ebean</artifactId>
         <version>${jooby.version}</version>
       </dependency>

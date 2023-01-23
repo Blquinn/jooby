@@ -1,13 +1,14 @@
 package io.jooby.nima;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+import io.helidon.nima.webserver.Routing;
 import io.helidon.nima.webserver.WebServer;
+import io.helidon.nima.webserver.http.HttpRouting;
 import io.jooby.Jooby;
 import io.jooby.Server;
 import io.jooby.ServerOptions;
 import io.jooby.SneakyThrows;
 import io.jooby.internal.nima.RequestHandler;
-import io.jooby.internal.nima.NoopRouting;
 
 import java.net.BindException;
 import java.util.ArrayList;
@@ -51,17 +52,19 @@ public class HelidonNimaServer extends Server.Base {
         try {
             applications.add(application);
 
-            RequestHandler h = new RequestHandler(application, router);
-
             addShutdownHook();
+
+            RequestHandler h = new RequestHandler(application.getRouter());
+
+            // TODO: Can we get rid of the nima router?
+            Routing routing = HttpRouting.builder()
+                    .any(h::handle)
+                    .build();
 
             WebServer server = WebServer.builder()
                     .host(options.getHost())
                     .port(options.getPort())
-                    // This seems bad because it throws an Exception before every request.
-                    // Implement an empty router somehow?
-                    .addRouting(new NoopRouting())
-                    .directHandler(h)
+                    .addRouting(routing)
                     .build();
 
             server.start();

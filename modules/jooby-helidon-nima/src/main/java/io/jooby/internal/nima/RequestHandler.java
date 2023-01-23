@@ -1,25 +1,19 @@
 package io.jooby.internal.nima;
 
-import io.helidon.common.http.DirectHandler;
-import io.helidon.common.http.Http;
-import io.helidon.common.http.ServerResponseHeaders;
-import io.jooby.Jooby;
+import io.helidon.nima.webserver.http.ServerRequest;
+import io.helidon.nima.webserver.http.ServerResponse;
 import io.jooby.Router;
 
-public class RequestHandler implements DirectHandler {
+public class RequestHandler {
 
-    private final Jooby application;
     private final Router router;
 
-    public RequestHandler(Jooby application, Router router) {
-        this.application = application;
+    public RequestHandler(Router router) {
         this.router = router;
     }
 
-    @Override
-    public TransportResponse handle(TransportRequest transportRequest, EventType eventType, Http.Status status, ServerResponseHeaders serverResponseHeaders, String s) {
-        NimaContext context = new NimaContext();
+    public void handle(ServerRequest request, ServerResponse response) {
+        NimaContext context = new NimaContext(request, response, router);
         router.match(context).execute(context);
-        return TransportResponse.builder().build();
     }
 }
