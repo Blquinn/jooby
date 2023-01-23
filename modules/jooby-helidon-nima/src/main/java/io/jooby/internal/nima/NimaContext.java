@@ -997,7 +997,8 @@ public class NimaContext implements DefaultContext {
 
     @NonNull @Override
     public Context dispatch(@NonNull Runnable action) {
-        return dispatch(router.getWorker(), action);
+        action.run();
+        return this;
     }
 
     @NonNull @Override
