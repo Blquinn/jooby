@@ -12,6 +12,7 @@ module io.jooby.jetty {
   requires io.jooby;
   requires com.github.spotbugs.annotations;
   requires typesafe.config;
+  requires kotlin.stdlib;
   requires org.eclipse.jetty.server;
   requires org.eclipse.jetty.servlet;
   requires org.eclipse.jetty.websocket.jetty.server;

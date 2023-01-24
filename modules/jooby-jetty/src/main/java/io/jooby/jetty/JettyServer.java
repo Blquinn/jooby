@@ -5,23 +5,14 @@
  */
 package io.jooby.jetty;
 
-import java.net.BindException;
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
-
+import com.typesafe.config.Config;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import io.jooby.*;
+import io.jooby.internal.jetty.JettyServlet;
+import io.jooby.internal.jetty.http2.JettyHttp2Configurer;
 import org.eclipse.jetty.http.UriCompliance;
-import org.eclipse.jetty.server.ConnectionFactory;
-import org.eclipse.jetty.server.HttpConfiguration;
-import org.eclipse.jetty.server.HttpConnectionFactory;
-import org.eclipse.jetty.server.MultiPartFormDataCompliance;
-import org.eclipse.jetty.server.SecureRequestCustomizer;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.ServerConnector;
-import org.eclipse.jetty.server.SslConnectionFactory;
+import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.server.handler.gzip.GzipHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -33,16 +24,14 @@ import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.eclipse.jetty.util.thread.ThreadPool;
 import org.eclipse.jetty.websocket.server.config.JettyWebSocketServletContainerInitializer;
 
-import com.typesafe.config.Config;
-import edu.umd.cs.findbugs.annotations.NonNull;
-import io.jooby.Jooby;
-import io.jooby.Router;
-import io.jooby.ServerOptions;
-import io.jooby.SneakyThrows;
-import io.jooby.SslOptions;
-import io.jooby.WebSocket;
-import io.jooby.internal.jetty.JettyServlet;
-import io.jooby.internal.jetty.http2.JettyHttp2Configurer;
+import java.net.BindException;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 /**
  * Web server implementation using <a href="https://www.eclipse.org/jetty/">Jetty</a>.
@@ -83,7 +72,16 @@ public class JettyServer extends io.jooby.Server.Base {
 
       addShutdownHook();
 
-      QueuedThreadPool executor = new QueuedThreadPool(options.getWorkerThreads());
+      QueuedThreadPool executor;
+
+      if (options.getUseVirtualThreads()) {
+        executor = new QueuedThreadPool();
+        executor.setReservedThreads(0);
+        executor.setVirtualThreadsExecutor(Executors.newVirtualThreadPerTaskExecutor());
+      } else {
+        executor = new QueuedThreadPool(options.getWorkerThreads());
+      }
+
       executor.setName("worker");
 
       fireStart(applications, executor);

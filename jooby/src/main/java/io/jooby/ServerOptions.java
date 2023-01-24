@@ -116,6 +116,9 @@ public class ServerOptions {
 
   private Boolean expectContinue;
 
+  /** Use virtual threads, if the configured server supports them. */
+  private boolean useVirtualThreads = false;
+
   /**
    * Creates server options from config object. The configuration options must provided entries
    * like: <code>server.port</code>, <code>server.ioThreads</code>, etc...
@@ -619,5 +622,17 @@ public class ServerOptions {
     } catch (IOException x) {
       throw SneakyThrows.propagate(x);
     }
+  }
+
+  public boolean getUseVirtualThreads() {
+    return useVirtualThreads;
+  }
+
+  /**
+   * Determines whether the server should use virtual threads, if it supports them, and they are enabled on the jvm.
+   */
+  public ServerOptions setUseVirtualThreads(boolean useVirtualThreads) {
+    this.useVirtualThreads = useVirtualThreads;
+    return this;
   }
 }
